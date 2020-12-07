@@ -1,0 +1,506 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+Object {
+  "Outputs": Object {
+    "HTTPendpoint": Object {
+      "Export": Object {
+        "Name": "httpEndpoint",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "HttpApiF5A9A8A7",
+          "ApiEndpoint",
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "AssetParameters811bcf1f567833977508b85b900cf7c471f5031d77028c2858f0fd97bb371475ArtifactHash880BFE26": Object {
+      "Description": "Artifact hash for asset \\"811bcf1f567833977508b85b900cf7c471f5031d77028c2858f0fd97bb371475\\"",
+      "Type": "String",
+    },
+    "AssetParameters811bcf1f567833977508b85b900cf7c471f5031d77028c2858f0fd97bb371475S3BucketA8CBEE4F": Object {
+      "Description": "S3 bucket for asset \\"811bcf1f567833977508b85b900cf7c471f5031d77028c2858f0fd97bb371475\\"",
+      "Type": "String",
+    },
+    "AssetParameters811bcf1f567833977508b85b900cf7c471f5031d77028c2858f0fd97bb371475S3VersionKeyC4193B5B": Object {
+      "Description": "S3 key for asset version \\"811bcf1f567833977508b85b900cf7c471f5031d77028c2858f0fd97bb371475\\"",
+      "Type": "String",
+    },
+    "AssetParametersf6d6356f9368309ec157ddc13ed6cb2d534321c105c7380d538192aa3ed31d8bArtifactHashD447ADAA": Object {
+      "Description": "Artifact hash for asset \\"f6d6356f9368309ec157ddc13ed6cb2d534321c105c7380d538192aa3ed31d8b\\"",
+      "Type": "String",
+    },
+    "AssetParametersf6d6356f9368309ec157ddc13ed6cb2d534321c105c7380d538192aa3ed31d8bS3Bucket3DAB689B": Object {
+      "Description": "S3 bucket for asset \\"f6d6356f9368309ec157ddc13ed6cb2d534321c105c7380d538192aa3ed31d8b\\"",
+      "Type": "String",
+    },
+    "AssetParametersf6d6356f9368309ec157ddc13ed6cb2d534321c105c7380d538192aa3ed31d8bS3VersionKeyCBCD6441": Object {
+      "Description": "S3 key for asset version \\"f6d6356f9368309ec157ddc13ed6cb2d534321c105c7380d538192aa3ed31d8b\\"",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "GetHandlerEF5E42BB": Object {
+      "DependsOn": Array [
+        "GetHandlerServiceRoleDefaultPolicy06D2AD40",
+        "GetHandlerServiceRole9313FCB8",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParameters811bcf1f567833977508b85b900cf7c471f5031d77028c2858f0fd97bb371475S3BucketA8CBEE4F",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters811bcf1f567833977508b85b900cf7c471f5031d77028c2858f0fd97bb371475S3VersionKeyC4193B5B",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters811bcf1f567833977508b85b900cf7c471f5031d77028c2858f0fd97bb371475S3VersionKeyC4193B5B",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "SENDGRID_API_KEY": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "{{resolve:secretsmanager:arn:",
+                  Object {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":secretsmanager:",
+                  Object {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  Object {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":secret:edmPreferences/sendgridApiKey:SecretString:::}}",
+                ],
+              ],
+            },
+          },
+        },
+        "Handler": "index.handler",
+        "MemorySize": 3008,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "GetHandlerServiceRole9313FCB8",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Timeout": 20,
+        "TracingConfig": Object {
+          "Mode": "Active",
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "GetHandlerServiceRole9313FCB8": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "GetHandlerServiceRoleDefaultPolicy06D2AD40": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GetHandlerServiceRoleDefaultPolicy06D2AD40",
+        "Roles": Array [
+          Object {
+            "Ref": "GetHandlerServiceRole9313FCB8",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "HttpApiDefaultStage3EEB07D6": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "HttpApiF5A9A8A7",
+        },
+        "AutoDeploy": true,
+        "StageName": "$default",
+      },
+      "Type": "AWS::ApiGatewayV2::Stage",
+    },
+    "HttpApiF5A9A8A7": Object {
+      "Properties": Object {
+        "CorsConfiguration": Object {
+          "AllowHeaders": Array [
+            "Authorization",
+          ],
+          "AllowMethods": Array [
+            "GET",
+            "HEAD",
+            "OPTIONS",
+            "POST",
+          ],
+          "AllowOrigins": Array [
+            "*.parksaustralia.gov.au",
+            "http://localhost:4000/",
+          ],
+          "MaxAge": 864000,
+        },
+        "Name": "HttpApi",
+        "ProtocolType": "HTTP",
+      },
+      "Type": "AWS::ApiGatewayV2::Api",
+    },
+    "HttpApiGETdatajsonFCC97496": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "HttpApiF5A9A8A7",
+        },
+        "RouteKey": "GET /data.json",
+        "Target": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "integrations/",
+              Object {
+                "Ref": "HttpApiGETdatajsonGETdatajsonIntegrationF41C6D31",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "HttpApiGETdatajsonGETdatajsonIntegrationF41C6D31": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "HttpApiF5A9A8A7",
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": Object {
+          "Fn::GetAtt": Array [
+            "GetHandlerEF5E42BB",
+            "Arn",
+          ],
+        },
+        "PayloadFormatVersion": "2.0",
+      },
+      "Type": "AWS::ApiGatewayV2::Integration",
+    },
+    "HttpApiGETdatajsonMyTestStackHttpApiGETdatajson70F911A4PermissionFAB8763E": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "GetHandlerEF5E42BB",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              Object {
+                "Ref": "HttpApiF5A9A8A7",
+              },
+              "/*/*/data.json",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "HttpApiPOSTBB5FB9D0": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "HttpApiF5A9A8A7",
+        },
+        "RouteKey": "POST /",
+        "Target": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "integrations/",
+              Object {
+                "Ref": "HttpApiPOSTPOSTIntegrationB4C14062",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "HttpApiPOSTMyTestStackHttpApiPOST29D6AAA2PermissionC93638D3": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "PostHandler0D20EBFB",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              Object {
+                "Ref": "HttpApiF5A9A8A7",
+              },
+              "/*/*/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "HttpApiPOSTPOSTIntegrationB4C14062": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "HttpApiF5A9A8A7",
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": Object {
+          "Fn::GetAtt": Array [
+            "PostHandler0D20EBFB",
+            "Arn",
+          ],
+        },
+        "PayloadFormatVersion": "2.0",
+      },
+      "Type": "AWS::ApiGatewayV2::Integration",
+    },
+    "PostHandler0D20EBFB": Object {
+      "DependsOn": Array [
+        "PostHandlerServiceRoleDefaultPolicyCB2B7C81",
+        "PostHandlerServiceRoleA5E1C273",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParametersf6d6356f9368309ec157ddc13ed6cb2d534321c105c7380d538192aa3ed31d8bS3Bucket3DAB689B",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParametersf6d6356f9368309ec157ddc13ed6cb2d534321c105c7380d538192aa3ed31d8bS3VersionKeyCBCD6441",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParametersf6d6356f9368309ec157ddc13ed6cb2d534321c105c7380d538192aa3ed31d8bS3VersionKeyCBCD6441",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "SENDGRID_API_KEY": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "{{resolve:secretsmanager:arn:",
+                  Object {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":secretsmanager:",
+                  Object {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  Object {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":secret:edmPreferences/sendgridApiKey:SecretString:::}}",
+                ],
+              ],
+            },
+          },
+        },
+        "Handler": "index.handler",
+        "MemorySize": 3008,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "PostHandlerServiceRoleA5E1C273",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Timeout": 20,
+        "TracingConfig": Object {
+          "Mode": "Active",
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "PostHandlerServiceRoleA5E1C273": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "PostHandlerServiceRoleDefaultPolicyCB2B7C81": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PostHandlerServiceRoleDefaultPolicyCB2B7C81",
+        "Roles": Array [
+          Object {
+            "Ref": "PostHandlerServiceRoleA5E1C273",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+  },
+}
+`;
