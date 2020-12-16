@@ -16,7 +16,7 @@ The project includes a Github Codespaces config that will create an environment 
 
 You may also like to set your SendGrid API key for local development and debugging:
 
-`export SENDGRID_API_KEY="SG.<snip>"`
+`export SENDGRID_VISITORS_API_KEY="SG.<snip>"`
 
 ## Deployment
 
@@ -28,18 +28,26 @@ Then you can deploy the stack with:
 npm run cdk deploy
 ```
 
-## SendGrid API key
+## SendGrid API keys
 
-The SendGrid API key is stored in AWS Secrets Manager and is pulled when deploying the application.
+The SendGrid API keys are stored in AWS Secrets Manager and is pulled when deploying the application.
 
-To set the key:
+To set the keys:
 
 ```
-aws secretsmanager create-secret --name edmPreferences/sendgridApiKey --description "SendGrid API key" --secret-string "<key>"
+aws secretsmanager create-secret --name sendgrid/visitorsApiKey --description "SendGrid visitors account API key" --secret-string "<key>"
+
+aws secretsmanager create-secret --name sendgrid/mediaApiKey --description "SendGrid media account API key" --secret-string "<key>"
+
+aws secretsmanager create-secret --name sendgrid/industryApiKey --description "SendGrid industry account API key" --secret-string "<key>"
 ```
 
 To change the key, the secret needs to first be updated and then the CDK stack redeployed:
 
 ```
-aws secretsmanager update-secret --name edmPreferences/sendgridApiKey --description "SendGrid API key" --secret-string "<key>"
+aws secretsmanager update-secret --name sendgrid/visitorsApiKey --description "SendGrid visitors account API key" --secret-string "<key>"
+
+aws secretsmanager update-secret --name sendgrid/mediaApiKey --description "SendGrid media account API key" --secret-string "<key>"
+
+aws secretsmanager update-secret --name sendgrid/industryApiKey --description "SendGrid industry account API key" --secret-string "<key>"
 ```

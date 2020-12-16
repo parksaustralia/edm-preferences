@@ -3,11 +3,11 @@ import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
 
 declare var process: {
   env: {
-    SENDGRID_API_KEY: string;
+    SENDGRID_INDUSTRY_API_KEY: string;
+    SENDGRID_MEDIA_API_KEY: string;
+    SENDGRID_VISITORS_API_KEY: string;
   };
 };
-
-sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
 type SendgridContact = {
   address_line_1: String;
@@ -129,9 +129,24 @@ export async function handler(
   let lists: List[];
   let emailInput = "";
 
+  let apiKey:
+    | "SENDGRID_INDUSTRY_API_KEY"
+    | "SENDGRID_MEDIA_API_KEY"
+    | "SENDGRID_VISITORS_API_KEY" = "SENDGRID_VISITORS_API_KEY";
+
   if (event.queryStringParameters) {
     emailInput = event.queryStringParameters["email"] || "";
+
+    if (event.queryStringParameters["account"] === "industry") {
+      apiKey = "SENDGRID_INDUSTRY_API_KEY";
+    }
+
+    if (event.queryStringParameters["account"] === "media") {
+      apiKey = "SENDGRID_MEDIA_API_KEY";
+    }
   }
+
+  sendgrid.setApiKey(process.env[apiKey]);
 
   let contact: Contact;
 

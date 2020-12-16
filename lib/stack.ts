@@ -10,11 +10,25 @@ export class Stack extends cdk.Stack {
     super(scope, id, props);
 
     const environment = {
-      SENDGRID_API_KEY: `${
+      SENDGRID_VISITORS_API_KEY: `${
         secretsManager.Secret.fromSecretNameV2(
           this,
-          "sendgridApiKey",
-          "edmPreferences/sendgridApiKey"
+          "sendgridVisitorsApiKey",
+          "sendgrid/visitorsApiKey"
+        ).secretValue
+      }`,
+      SENDGRID_INDUSTRY_API_KEY: `${
+        secretsManager.Secret.fromSecretNameV2(
+          this,
+          "sendgridIndustryApiKey",
+          "sendgrid/industryApiKey"
+        ).secretValue
+      }`,
+      SENDGRID_MEDIA_API_KEY: `${
+        secretsManager.Secret.fromSecretNameV2(
+          this,
+          "sendgridMediaApiKey",
+          "sendgrid/mediaApiKey"
         ).secretValue
       }`,
     };
@@ -23,7 +37,7 @@ export class Stack extends cdk.Stack {
       environment,
       memorySize: 3008,
       runtime: lambda.Runtime.NODEJS_12_X,
-      timeout: cdk.Duration.seconds(10),
+      timeout: cdk.Duration.seconds(15),
       tracing: lambda.Tracing.ACTIVE,
     });
 

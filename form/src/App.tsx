@@ -22,7 +22,10 @@ type Response = {
   }[];
 };
 
+type Account = "visitors" | "media" | "industry";
+
 type PostBody = {
+  account?: Account;
   contactId?: String;
   email: String;
   firstName?: String;
@@ -57,9 +60,23 @@ function Form() {
     [params]
   );
   const autoSave = useMemo(() => params.autoSave === "true", [params]);
+  const account: Account = useMemo(
+    function () {
+      const accountInput = Array.isArray(params.account)
+        ? params.account[0]
+        : params.account || "visitors";
+
+      return ["visitors", "industry", "media"].includes(accountInput)
+        ? (accountInput as Account)
+        : "visitors";
+    },
+    [params]
+  );
+
+  console.log(params);
 
   useEffect(() => {
-    fetch(`${apiUrl}data.json?email=${email}`)
+    fetch(`${apiUrl}data.json?email=${email}&account=${account}`)
       .then(function (res) {
         if (res.ok) {
           return res.json();
@@ -89,14 +106,14 @@ function Form() {
           setIsLoaded(true);
         }
       );
-  }, [email, listIds, autoSave]);
+  }, [account, email, listIds, autoSave]);
 
   // Submit data if coming from another sign up form
   useEffect(() => {
     if (data && !saved && autoSave) {
-      postData(data);
+      postData(data, account);
     }
-  }, [autoSave, data, saved]);
+  }, [account, autoSave, data, saved]);
 
   const onSubmit = function (event: FormEvent<HTMLFormElement>) {
     if (!data) {
@@ -105,13 +122,14 @@ function Form() {
 
     event.preventDefault();
 
-    postData(data);
+    postData(data, account);
   };
 
-  const postData = function (newData: Response) {
+  const postData = function (newData: Response, account: Account) {
     setIsLoaded(false);
 
     let body: PostBody = {
+      account,
       email: newData.email,
       firstName: newData.firstName,
       lastName: newData.lastName,
@@ -147,7 +165,7 @@ function Form() {
           return { ...list, isSubscribed: false };
         }),
       };
-      postData(newData);
+      postData(newData, account);
       setData(newData);
     }
   };

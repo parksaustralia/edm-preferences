@@ -3,11 +3,16 @@ import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
 
 declare var process: {
   env: {
-    SENDGRID_API_KEY: string;
+    SENDGRID_INDUSTRY_API_KEY: string;
+    SENDGRID_MEDIA_API_KEY: string;
+    SENDGRID_VISITORS_API_KEY: string;
   };
 };
 
-sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+type ApiKey =
+  | "SENDGRID_INDUSTRY_API_KEY"
+  | "SENDGRID_MEDIA_API_KEY"
+  | "SENDGRID_VISITORS_API_KEY";
 
 type SendgridContact = {
   address_line_1?: String;
@@ -29,6 +34,7 @@ type UpdateContactRequestBody = {
 };
 
 type FormInput = {
+  account?: "visitors" | "media" | "industry";
   contactId?: String;
   email: String;
   firstName?: String;
@@ -140,7 +146,17 @@ export async function handler(
       statusCode: 400,
     };
   }
+
   const formInput = JSON.parse(event.body) as FormInput;
+
+  const apiKey: ApiKey =
+    {
+      visitors: "SENDGRID_VISITORS_API_KEY" as ApiKey,
+      industry: "SENDGRID_INDUSTRY_API_KEY" as ApiKey,
+      media: "SENDGRID_MEDIA_API_KEY" as ApiKey,
+    }[formInput.account || "visitors"] || "SENDGRID_VISITORS_API_KEY";
+
+  sendgrid.setApiKey(process.env[apiKey]);
 
   if (formInput.contactId) {
     if (formInput.listIds.length) {
