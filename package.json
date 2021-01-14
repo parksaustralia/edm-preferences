@@ -18,7 +18,7 @@
     "@aws-cdk/aws-lambda-nodejs": "1.84.0",
     "@aws-cdk/aws-secretsmanager": "1.84.0",
     "@aws-cdk/core": "1.84.0",
-    "@types/aws-lambda": "8.10.64",
+    "@types/aws-lambda": "8.10.70",
     "@types/jest": "26.0.15",
     "@types/node": "10.17.27",
     "aws-cdk": "1.84.0",
