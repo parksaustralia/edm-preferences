@@ -31,7 +31,7 @@
     "typescript": "3.9.7"
   },
   "dependencies": {
-    "@sendgrid/client": "7.4.0",
+    "@sendgrid/client": "7.4.2",
     "aws-lambda": "1.0.6"
   },
   "targets": {
