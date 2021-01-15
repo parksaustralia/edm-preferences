@@ -63,6 +63,7 @@ export class Stack extends cdk.Stack {
           "https://staging.parksaustralia.gov.au",
           "http://localhost:3000",
           "http://localhost:4000",
+          "https://afca83b4-8ff0-4976-a7f7-695c937289de-3000.apps.codespaces.githubusercontent.com",
         ],
         maxAge: cdk.Duration.days(10),
       },

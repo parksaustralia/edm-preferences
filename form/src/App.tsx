@@ -5,10 +5,23 @@ import React, {
   ChangeEvent,
   FormEvent,
 } from "react";
-import queryString from "query-string";
-import Loader from "react-loader-spinner";
 
-const apiUrl = "https://l91q1bdnwe.execute-api.ap-southeast-2.amazonaws.com/";
+import {
+  Alert,
+  Box,
+  Button,
+  Checkbox,
+  Container,
+  Flex,
+  Input,
+  Label,
+  Spinner,
+  Text,
+  ThemeProvider,
+} from "theme-ui";
+import queryString from "query-string";
+
+const apiUrl = "https://pisa785pg7.execute-api.ap-southeast-2.amazonaws.com/";
 
 type Response = {
   contactId?: string;
@@ -33,23 +46,69 @@ type PostBody = {
   listIds: String[];
 };
 
-type Alert = {
+type AlertMessage = {
   message: String;
-  type: "success" | "secondary";
+  type: "primary" | "secondary";
+};
+
+const theme = {
+  fonts: {
+    body: 'Lato, "Helvetica Neue", Helvetica, Arial, sans-serif',
+  },
+  colors: {
+    background: "#fff",
+    muted: "#eee",
+    outline: "#ced4da",
+    primary: "#71273d",
+    text: "#333",
+  },
+  buttons: {
+    primary: {
+      cursor: "pointer",
+    },
+    secondary: {
+      bg: "muted",
+      color: "text",
+      cursor: "pointer",
+    },
+  },
+  alerts: {
+    primary: {
+      color: "#8b6633",
+      bg: "#fff8e0",
+    },
+    secondary: {
+      color: "text",
+      bg: "muted",
+    },
+  },
+  forms: {
+    input: {
+      borderColor: "outline",
+    },
+  },
+  styles: {
+    root: {
+      fontFamily: "body",
+      fontWeight: "body",
+      fontSize: 2,
+    },
+  },
 };
 
 function Form() {
-  const [alert, setAlert] = useState<Alert | null>(null);
+  const [alert, setAlert] = useState<AlertMessage | null>(null);
   const [data, setData] = useState<Response | null>(null);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [saved, setSaved] = useState<boolean>(false);
-
   const params = useMemo(() => queryString.parse(window.location.search), []);
+
   const email = useMemo(
     () => (Array.isArray(params.email) ? params.email[0] : params.email || ""),
     [params]
   );
+
   const listIds = useMemo(
     () =>
       params.list_id === undefined
@@ -59,7 +118,9 @@ function Form() {
         : [params.list_id],
     [params]
   );
+
   const autoSave = useMemo(() => params.autoSave === "true", [params]);
+
   const account: Account = useMemo(
     function () {
       const accountInput = Array.isArray(params.account)
@@ -72,8 +133,6 @@ function Form() {
     },
     [params]
   );
-
-  console.log(params);
 
   useEffect(() => {
     fetch(`${apiUrl}data.json?email=${email}&account=${account}`)
@@ -115,7 +174,7 @@ function Form() {
     }
   }, [account, autoSave, data, saved]);
 
-  const onSubmit = function (event: FormEvent<HTMLFormElement>) {
+  const onSubmit = function (event: FormEvent<HTMLDivElement>) {
     if (!data) {
       return;
     }
@@ -147,7 +206,7 @@ function Form() {
       .then(
         (result: { message: string }) => {
           setIsLoaded(true);
-          setAlert({ ...result, type: "success" });
+          setAlert({ ...result, type: "primary" });
         },
         (error) => {
           setIsLoaded(true);
@@ -212,39 +271,28 @@ function Form() {
   };
 
   if (error) {
+    console.warn(error);
     return (
-      <div
-        style={{
-          width: "100%",
-          minHeight: "400px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+      <Flex
+        sx={{ justifyContent: "center", alignItems: "center", height: "100vh" }}
       >
-        Error
-      </div>
+        <Text sx={{ textAlign: "center" }}>Error</Text>
+      </Flex>
     );
   } else if (!isLoaded || !data) {
     return (
-      <div
-        style={{
-          width: "100%",
-          minHeight: "400px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+      <Flex
+        sx={{ justifyContent: "center", alignItems: "center", height: "100vh" }}
       >
-        <Loader type="ThreeDots" color="#007bff" height={100} width={100} />
-      </div>
+        <Spinner sx={{ flex: "1 1 auto" }} />
+      </Flex>
     );
   }
 
   const alertBox = alert && (
-    <div className={`alert alert-${alert.type}`} role="alert">
+    <Alert mb={4} mt={4} padding={3} variant={alert.type}>
       {alert.message}
-    </div>
+    </Alert>
   );
 
   const filteredLists = data.lists.filter(function (list) {
@@ -252,77 +300,77 @@ function Form() {
   });
 
   const lists = filteredLists.map(function (list, index) {
-    const name = `list-${index}`;
     return (
-      <div className="form-check" key={name}>
-        <label className="form-check-label">
-          <input
-            className="form-check-input"
-            type="checkbox"
+      <Box>
+        <Label mb={2} key={`list-${index}`}>
+          <Checkbox
             checked={list.isSubscribed}
             onChange={bindSetListSubscription(list.id)}
           />
           {list.name.replace(/\[.*\] /, "")}
-        </label>
-      </div>
+        </Label>
+      </Box>
     );
   });
 
   return (
-    <form onSubmit={onSubmit}>
+    <Box as="form" onSubmit={onSubmit}>
       {alertBox}
-      <div className="form-group">
-        <label htmlFor="email">Email address</label>
-        <input
-          className="form-control"
-          disabled={saved}
-          id="email"
-          name="email"
-          onChange={setEmail}
-          type="email"
-          value={data.email}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="firstName">First name</label>
-        <input
-          className="form-control"
-          id="firstName"
-          name="firstName"
-          onChange={setFirstName}
-          value={data.firstName}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="lastName">Last name</label>
-        <input
-          className="form-control"
-          id="lastName"
-          name="lastName"
-          onChange={setLastName}
-          value={data.lastName}
-        />
-      </div>
-      {lists}
-      <br />
-      <button type="submit" className="btn btn-primary btn-lg btn-block">
+      <Label htmlFor="email" mb={1}>
+        Email address
+      </Label>
+      <Input
+        disabled={saved}
+        id="email"
+        name="email"
+        onChange={setEmail}
+        type="email"
+        value={data.email}
+        mb={3}
+      />
+
+      <Label htmlFor="firstName" mb={1}>
+        First name
+      </Label>
+      <Input
+        id="firstName"
+        name="firstName"
+        onChange={setFirstName}
+        value={data.firstName}
+        mb={3}
+      />
+
+      <Label htmlFor="lastName" mb={1}>
+        Last name
+      </Label>
+      <Input
+        id="lastName"
+        name="lastName"
+        onChange={setLastName}
+        value={data.lastName}
+        mb={3}
+      />
+
+      <Box mt={3}>{lists}</Box>
+
+      <Button mr={3} mt={3}>
         Save preferences
-      </button>
-      <button
-        className="btn btn-secondary btn-block"
-        onClick={unsubscribeFromAll}
-      >
+      </Button>
+
+      <Button onClick={unsubscribeFromAll} variant="secondary">
         Unsubscribe from all
-      </button>
-    </form>
+      </Button>
+    </Box>
   );
 }
 
 function App() {
   return (
-    <div className="container">
-      <Form />
-    </div>
+    <ThemeProvider theme={theme}>
+      <Container>
+        <Form />
+      </Container>
+    </ThemeProvider>
   );
 }
 

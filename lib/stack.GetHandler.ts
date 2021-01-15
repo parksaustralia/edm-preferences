@@ -1,5 +1,5 @@
 import sendgrid from "@sendgrid/client";
-import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
+import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "./lambda";
 
 declare var process: {
   env: {
