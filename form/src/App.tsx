@@ -87,6 +87,9 @@ const theme = {
   forms: {
     input: {
       borderColor: "outline",
+      "&:disabled": {
+        bg: "muted",
+      },
     },
   },
   styles: {
