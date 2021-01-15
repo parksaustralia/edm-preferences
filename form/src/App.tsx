@@ -65,11 +65,13 @@ const theme = {
   buttons: {
     primary: {
       cursor: "pointer",
+      padding: 3,
     },
     secondary: {
       bg: "muted",
       color: "text",
       cursor: "pointer",
+      padding: 3,
     },
   },
   alerts: {
@@ -290,7 +292,7 @@ function Form() {
   }
 
   const alertBox = alert && (
-    <Alert mb={4} mt={4} padding={3} variant={alert.type}>
+    <Alert mb={4} padding={3} variant={alert.type}>
       {alert.message}
     </Alert>
   );
@@ -301,8 +303,8 @@ function Form() {
 
   const lists = filteredLists.map(function (list, index) {
     return (
-      <Box>
-        <Label mb={2} key={`list-${index}`}>
+      <Box key={`list-${index}`}>
+        <Label mb={2}>
           <Checkbox
             checked={list.isSubscribed}
             onChange={bindSetListSubscription(list.id)}
