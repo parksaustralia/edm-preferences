@@ -66,6 +66,10 @@ const theme = {
     primary: {
       cursor: "pointer",
       padding: 3,
+      "&:disabled": {
+        cursor: "not-allowed",
+        color: "muted",
+      },
     },
     secondary: {
       bg: "muted",
@@ -102,12 +106,16 @@ const theme = {
 };
 
 function Form() {
+  const [agreed, setAgreed] = useState<boolean>(false);
   const [alert, setAlert] = useState<AlertMessage | null>(null);
   const [data, setData] = useState<Response | null>(null);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [saved, setSaved] = useState<boolean>(false);
-  const params = useMemo(() => queryString.parse(window.location.search), []);
+  const params = useMemo(
+    () => queryString.parse(window.location.search, { arrayFormat: "index" }),
+    []
+  );
 
   const email = useMemo(
     () => (Array.isArray(params.email) ? params.email[0] : params.email || ""),
@@ -116,11 +124,11 @@ function Form() {
 
   const listIds = useMemo(
     () =>
-      params.list_id === undefined
+      params.listId === undefined
         ? []
-        : Array.isArray(params.list_id)
-        ? params.list_id
-        : [params.list_id],
+        : Array.isArray(params.listId)
+        ? params.listId
+        : [params.listId],
     [params]
   );
 
@@ -180,11 +188,11 @@ function Form() {
   }, [account, autoSave, data, saved]);
 
   const onSubmit = function (event: FormEvent<HTMLDivElement>) {
-    if (!data) {
+    event.preventDefault();
+
+    if (!data || needsPrivacyAgreement()) {
       return;
     }
-
-    event.preventDefault();
 
     postData(data, account);
   };
@@ -210,6 +218,7 @@ function Form() {
       .then((res) => res.json())
       .then(
         (result: { message: string }) => {
+          setSaved(true);
           setIsLoaded(true);
           setAlert({ ...result, type: "primary" });
         },
@@ -318,6 +327,38 @@ function Form() {
     );
   });
 
+  const needsPrivacyAgreement = function () {
+    return !saved && !autoSave && !agreed;
+  };
+
+  const privacyCheckbox = function () {
+    if (saved || autoSave) {
+      return;
+    }
+
+    return (
+      <Label mt={4} mb={3} sx={{ fontWeight: 700 }}>
+        <Checkbox
+          checked={agreed}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            setAgreed(event.target.checked);
+          }}
+        />
+        <span>
+          I agree to the collection of personal information under the terms of
+          the&nbsp;
+          <a
+            href="https://parksaustralia.gov.au/privacy/"
+            rel="noreferrer"
+            target="_blank"
+          >
+            Privacy Notice
+          </a>
+        </span>
+      </Label>
+    );
+  };
+
   return (
     <Box as="form" onSubmit={onSubmit}>
       {alertBox}
@@ -358,13 +399,17 @@ function Form() {
 
       <Box mt={3}>{lists}</Box>
 
-      <Button mr={3} mt={3}>
+      {privacyCheckbox()}
+
+      <Button disabled={needsPrivacyAgreement()} mr={3} mt={3}>
         Save preferences
       </Button>
 
-      <Button onClick={unsubscribeFromAll} variant="secondary">
-        Unsubscribe from all
-      </Button>
+      {saved && (
+        <Button onClick={unsubscribeFromAll} variant="secondary">
+          Unsubscribe from all
+        </Button>
+      )}
     </Box>
   );
 }
