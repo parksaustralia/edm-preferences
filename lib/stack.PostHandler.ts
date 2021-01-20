@@ -72,7 +72,7 @@ async function postContact(input: FormInput) {
     list_ids: input.listIds,
   } as UpdateContactRequestBody;
 
-  console.log(`Updating contact ${input}`);
+  console.log(`Updating contact ${JSON.stringify(body)}`);
 
   const response = await sendgrid.request({
     body,

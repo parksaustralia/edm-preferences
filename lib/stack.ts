@@ -38,7 +38,7 @@ export class Stack extends cdk.Stack {
       memorySize: 3008,
       runtime: lambda.Runtime.NODEJS_12_X,
       timeout: cdk.Duration.seconds(15),
-      tracing: lambda.Tracing.ACTIVE,
+      tracing: lambda.Tracing.DISABLED,
     });
 
     const postHandler = new lambdaNode.NodejsFunction(this, "PostHandler", {
@@ -46,7 +46,7 @@ export class Stack extends cdk.Stack {
       memorySize: 3008,
       runtime: lambda.Runtime.NODEJS_12_X,
       timeout: cdk.Duration.seconds(15),
-      tracing: lambda.Tracing.ACTIVE,
+      tracing: lambda.Tracing.DISABLED,
     });
 
     const httpApi = new apigw.HttpApi(this, "HttpApi", {
