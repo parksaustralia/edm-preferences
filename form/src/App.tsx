@@ -310,9 +310,13 @@ function Form() {
   } else if (!isLoaded || !data) {
     return (
       <Flex
-        sx={{ justifyContent: "center", alignItems: "center", height: "100vh" }}
+        sx={{
+          justifyContent: "center",
+          alignItems: "top",
+          height: "100vh",
+        }}
       >
-        <Spinner sx={{ flex: "1 1 auto" }} />
+        <Spinner sx={{ flex: "1 1 auto", marginTop: "30vh" }} />
       </Flex>
     );
   }
