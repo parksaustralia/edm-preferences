@@ -112,6 +112,7 @@ function Form() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [saved, setSaved] = useState<boolean>(false);
+
   const params = useMemo(
     () => queryString.parse(window.location.search, { arrayFormat: "index" }),
     []
@@ -133,6 +134,19 @@ function Form() {
   );
 
   const autoSave = useMemo(() => params.autoSave === "true", [params]);
+
+  const filteredLists = useMemo(
+    () =>
+      (data?.lists || []).filter(function (list) {
+        return !list.name.startsWith("[SPECIAL]") || list.isSubscribed;
+      }),
+    [data]
+  );
+
+  const allSubbed = useMemo(
+    () => filteredLists && filteredLists.every((list) => list.isSubscribed),
+    [filteredLists]
+  );
 
   const account: Account = useMemo(
     function () {
@@ -309,10 +323,6 @@ function Form() {
     </Alert>
   );
 
-  const filteredLists = data.lists.filter(function (list) {
-    return !list.name.startsWith("[SPECIAL]") || list.isSubscribed;
-  });
-
   const lists = filteredLists.map(function (list, index) {
     return (
       <Box key={`list-${index}`}>
@@ -359,6 +369,18 @@ function Form() {
     );
   };
 
+  const selectAllCheckbox = function () {
+    if (data) {
+      const newData = {
+        ...data,
+        lists: filteredLists.map(function (list) {
+          return { ...list, isSubscribed: !allSubbed };
+        }),
+      };
+      setData(newData);
+    }
+  };
+
   return (
     <Box as="form" onSubmit={onSubmit}>
       {alertBox}
@@ -396,6 +418,16 @@ function Form() {
         value={data.lastName}
         mb={3}
       />
+
+      <Label mt={4} mb={3}>
+        <Checkbox
+          checked={allSubbed}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            selectAllCheckbox();
+          }}
+        />
+        Select all
+      </Label>
 
       <Box mt={3}>{lists}</Box>
 
