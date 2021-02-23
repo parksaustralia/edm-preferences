@@ -23,7 +23,7 @@
     "@types/jest": "26.0.20",
     "@types/node": "10.17.50",
     "aws-cdk": "1.85.0",
-    "aws-sdk": "2.827.0",
+    "aws-sdk": "2.850.0",
     "esbuild": "0.8.31",
     "jest": "26.6.1",
     "lambda-local": "1.7.4",
