@@ -36,7 +36,7 @@ export class Stack extends cdk.Stack {
     const getHandler = new lambdaNode.NodejsFunction(this, "GetHandler", {
       environment,
       memorySize: 3008,
-      runtime: lambda.Runtime.NODEJS_12_X,
+      runtime: lambda.Runtime.NODEJS_14_X,
       timeout: cdk.Duration.seconds(15),
       tracing: lambda.Tracing.DISABLED,
     });
@@ -44,7 +44,7 @@ export class Stack extends cdk.Stack {
     const postHandler = new lambdaNode.NodejsFunction(this, "PostHandler", {
       environment,
       memorySize: 3008,
-      runtime: lambda.Runtime.NODEJS_12_X,
+      runtime: lambda.Runtime.NODEJS_14_X,
       timeout: cdk.Duration.seconds(15),
       tracing: lambda.Tracing.DISABLED,
     });

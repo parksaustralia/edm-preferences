@@ -6,7 +6,7 @@ This project is set up and deployed using [AWS CDK](https://docs.aws.amazon.com/
 
 ## Development
 
-This project requires [Node.js 12.x](https://nodejs.org/en/download/releases/) and that you have [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured in order to deploy.
+This project requires [Node.js 14.x](https://nodejs.org/en/download/releases/) and that you have [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured in order to deploy.
 
 - `npm install`
 - `npm run test`
