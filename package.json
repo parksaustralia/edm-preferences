@@ -19,7 +19,7 @@
     "@aws-cdk/aws-secretsmanager": "1.91.0",
     "@aws-cdk/core": "1.91.0",
     "@sendgrid/client": "7.4.2",
-    "@types/aws-lambda": "8.10.70",
+    "@types/aws-lambda": "8.10.145",
     "@types/jest": "26.0.20",
     "@types/node": "10.17.50",
     "aws-cdk": "1.91.0",
